@@ -1,0 +1,17 @@
+# deps
+node_modules/
+
+# next
+.next/
+out/
+
+# env — NEVER commit real credentials
+.env.local
+.env*.local
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+*.pem
