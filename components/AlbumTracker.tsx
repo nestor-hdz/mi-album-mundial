@@ -13,6 +13,7 @@ import RepeatsList from "./RepeatsList";
 import TradeAnalyzer from "./TradeAnalyzer";
 import AuthButton from "./AuthButton";
 import AdSlot from "./AdSlot";
+import Link from "next/link";
 
 export default function AlbumTracker() {
   const [counts, setCounts] = useState<Counts>({});
@@ -176,6 +177,12 @@ export default function AlbumTracker() {
           </div>
         )}
       </main>
+
+      <footer className="shrink-0 border-t border-slate-800 py-2 px-4 flex justify-center">
+        <Link href="/privacy" className="text-[10px] text-slate-600 hover:text-slate-400 transition-colors">
+          Privacidad y Términos · No afiliado con FIFA ni Panini
+        </Link>
+      </footer>
     </div>
   );
 }
