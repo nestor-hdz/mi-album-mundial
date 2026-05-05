@@ -14,6 +14,12 @@ import TradeAnalyzer from "./TradeAnalyzer";
 import AuthButton from "./AuthButton";
 import AdSlot from "./AdSlot";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import Toast from "./Toast";
+import type { Sticker } from "@/lib/stickers";
+
+// ScannerModal uses camera + Tesseract — browser-only, loaded on demand
+const ScannerModal = dynamic(() => import("./ScannerModal"), { ssr: false });
 
 export default function AlbumTracker() {
   const [counts, setCounts] = useState<Counts>({});
@@ -21,6 +27,8 @@ export default function AlbumTracker() {
   const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState<"album" | "repetidas" | "intercambiar">("album");
   const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
+  const [scannerOpen, setScannerOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const syncTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // 1. Load localStorage on mount
@@ -80,6 +88,13 @@ export default function AlbumTracker() {
       else next[id] = cur - 1;
       return next;
     });
+  }, []);
+
+  const handleScan = useCallback((sticker: Sticker) => {
+    setCounts((prev) => ({ ...prev, [sticker.id]: (prev[sticker.id] || 0) + 1 }));
+    setToast(`✅ ${sticker.code} agregada`);
+    // Jump to the scanned section so the user can see it highlighted
+    setActiveSection(sticker.section);
   }, []);
 
   const stats = useMemo(() => {
@@ -150,7 +165,7 @@ export default function AlbumTracker() {
       </nav>
 
       {/* CONTENT */}
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden relative">
         {tab === "album" && (
           <div className="flex h-full">
             <SectionSidebar
@@ -183,6 +198,31 @@ export default function AlbumTracker() {
           Privacidad y Términos · No afiliado con FIFA ni Panini
         </Link>
       </footer>
+
+      {/* Floating scan button — only on album tab */}
+      {tab === "album" && (
+        <button
+          className="fixed bottom-14 right-4 z-30 w-14 h-14 rounded-full bg-amber-400 text-slate-950 shadow-lg flex flex-col items-center justify-center gap-0.5 cursor-pointer border-0 active:scale-95 transition-transform"
+          onClick={() => setScannerOpen(true)}
+          aria-label="Escanear estampa"
+        >
+          <span className="text-xl leading-none">📷</span>
+          <span className="text-[8px] font-bold uppercase leading-none">Scan</span>
+        </button>
+      )}
+
+      {/* Scanner modal */}
+      <ScannerModal
+        open={scannerOpen}
+        onClose={() => setScannerOpen(false)}
+        onMatch={(sticker) => {
+          handleScan(sticker);
+          setScannerOpen(false);
+        }}
+      />
+
+      {/* Toast notification */}
+      <Toast message={toast} onDismiss={() => setToast(null)} />
     </div>
   );
 }

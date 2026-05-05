@@ -17,3 +17,12 @@ body {
   background: #334155;
   border-radius: 2px;
 }
+
+/* Toast slide-up animation */
+@keyframes toast-slide-up {
+  from { transform: translate(-50%, 16px); opacity: 0; }
+  to   { transform: translate(-50%, 0);    opacity: 1; }
+}
+.toast-in {
+  animation: toast-slide-up 0.18s ease-out both;
+}
