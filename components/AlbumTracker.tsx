@@ -106,7 +106,7 @@ export default function AlbumTracker() {
         <div className="flex justify-between items-start mb-3">
           <div>
             <div className="text-[10px] font-bold tracking-widest text-amber-400 uppercase mb-1">
-              MUNDIAL 2026
+              FIFA WORLD CUP 2026
             </div>
             <h1 className="text-[22px] font-extrabold text-slate-100 m-0">Mi Álbum</h1>
           </div>

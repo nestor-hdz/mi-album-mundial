@@ -3,8 +3,8 @@ import "./globals.css";
 import SwRegister from "@/components/SwRegister";
 
 export const metadata: Metadata = {
-  title: "Mi Álbum Mundial 2026",
-  description: "Lleva el control de tu álbum del Mundial 2026",
+  title: "Mi Álbum Mundial 2026 - Rastrea tus estampas",
+  description: "Lleva el control de tu álbum del Mundial 2026. Ve cuáles te faltan, cuáles están repetidas e intercambia con amigos.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
