@@ -2,7 +2,7 @@
  * Singleton Tesseract.js worker — initialised once, reused across scans.
  * Lazy-imported so the ~10 MB WASM bundle never loads until the scanner is opened.
  */
-import type { Worker } from "tesseract.js";
+import { type Worker, PSM } from "tesseract.js";
 
 let workerPromise: Promise<Worker> | null = null;
 
@@ -28,10 +28,9 @@ async function boot(): Promise<Worker> {
   await worker.setParameters({
     // Restrict character set to what sticker codes can contain
     tessedit_char_whitelist: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ",
-    // PSM 11 — sparse text: find as much text as possible in no particular order.
+    // PSM.SPARSE_TEXT (11) — find as much text as possible in no particular order.
     // Best for a full camera frame where the code can appear anywhere.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    tessedit_pageseg_mode: "11" as any,
+    tessedit_pageseg_mode: PSM.SPARSE_TEXT,
   });
 
   return worker;
